@@ -8,6 +8,9 @@ from google_play_scraper.constants.element import ElementSpecs
 from google_play_scraper.constants.regex import Regex
 from google_play_scraper.constants.request import Formats
 from google_play_scraper.utils.request import post
+import pickle
+
+
 
 
 MAX_COUNT_EACH_FETCH = 199
@@ -114,7 +117,7 @@ def reviews(
     )
 
 
-def reviews_all(app_id: str, sleep_milliseconds: int = 0, **kwargs) -> list:
+def reviews_all(app_id: str, sleep_milliseconds: int = 0, data_dir: str, **kwargs) -> list:
     kwargs.pop("count", None)
     kwargs.pop("continuation_token", None)
 
@@ -122,6 +125,7 @@ def reviews_all(app_id: str, sleep_milliseconds: int = 0, **kwargs) -> list:
 
     result = []
 
+    counter = 1
     while True:
         _result, continuation_token = reviews(
             app_id,
@@ -130,7 +134,9 @@ def reviews_all(app_id: str, sleep_milliseconds: int = 0, **kwargs) -> list:
             **kwargs
         )
 
-        result += _result
+        #result += _result
+        pickle.dump( _result, open( data_dir+"/"+str(counter)+'.pkl', "wb" ) )
+        counter += 1
 
         if continuation_token.token is None:
             break
@@ -139,3 +145,7 @@ def reviews_all(app_id: str, sleep_milliseconds: int = 0, **kwargs) -> list:
             sleep(sleep_milliseconds / 1000)
 
     return result
+
+
+
+
