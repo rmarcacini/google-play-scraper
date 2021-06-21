@@ -117,7 +117,7 @@ def reviews(
     )
 
 
-def reviews_all(app_id: str, sleep_milliseconds: int = 0, data_dir: str, **kwargs) -> list:
+def reviews_all(app_id: str, data_dir: str, sleep_milliseconds: int = 0,  **kwargs) -> list:
     kwargs.pop("count", None)
     kwargs.pop("continuation_token", None)
 
